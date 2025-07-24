@@ -1,0 +1,709 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>My Single‑Page Personal Site</title>
+    <meta name="description" content=" HTML & CSS  project " />
+    <style>
+      :root {
+        --clr-bg: #0f172a; /* slate-900 */
+        --clr-bg-alt: #1e293b; /* slate-800 */
+        --clr-accent: #38bdf8; /* sky-400 */
+        --clr-accent-hover: #0ea5e9; /* sky-500 */
+        --clr-text: #f1f5f9; /* slate-100 */
+        --clr-text-muted: #cbd5e1; /* slate-300 */
+        --clr-success: #22c55e; /* green-500 */
+        --radius-lg: 1.25rem;
+        --trans-fast: 0.2s;
+        --trans-med: 0.4s;
+        --max-w: 1100px;
+        --nav-h: 64px;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+      html {
+        scroll-behavior: smooth;
+      }
+      body {
+        margin: 0;
+        font-family: system-ui, Segoe UI, Roboto, sans-serif;
+        line-height: 1.5;
+        color: var(--clr-text);
+        background: var(--clr-bg);
+      }
+      img {
+        max-width: 100%;
+        display: block;
+        height: auto;
+      }
+      a {
+        color: var(--clr-accent);
+        text-decoration: none;
+      }
+      a:hover,
+      a:focus {
+        color: var(--clr-accent-hover);
+        text-decoration: underline;
+      }
+      h1,
+      h2,
+      h3 {
+        line-height: 1.2;
+        margin-top: 0;
+      }
+      p {
+        margin-top: 0;
+      }
+
+      header.site-header {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 999;
+        height: var(--nav-h);
+        background: rgba(15, 23, 42, 0.85);
+        backdrop-filter: blur(8px);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .site-header nav {
+        width: 100%;
+        max-width: var(--max-w);
+        padding-inline: 1rem;
+        display: flex;
+        gap: 0.5rem;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .brand {
+        font-weight: 700;
+        font-size: 1.25rem;
+      }
+      .nav-links {
+        display: flex;
+        gap: 0.5rem;
+        flex-wrap: wrap;
+      }
+      .nav-links a {
+        padding: 0.35rem 0.75rem;
+        border-radius: var(--radius-lg);
+        transition: background var(--trans-fast) linear,
+          color var(--trans-fast) linear;
+      }
+      .nav-links a:hover,
+      .nav-links a:focus,
+      .nav-links a:target,
+      .nav-links a.active {
+        background: var(--clr-accent-hover);
+        color: #000;
+        text-decoration: none;
+      }
+
+      main {
+        margin-top: var(--nav-h);
+      }
+      section {
+        padding-block: clamp(3rem, 5vw, 5rem);
+        padding-inline: 1rem;
+      }
+      .section-inner {
+        width: 100%;
+        max-width: var(--max-w);
+        margin-inline: auto;
+      }
+      .section-alt {
+        background: var(--clr-bg-alt);
+      }
+
+      /* Utility */
+      .visually-hidden {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0 0 0 0);
+        clip-path: inset(50%);
+        border: 0;
+        padding: 0;
+      }
+      .btn {
+        display: inline-block;
+        padding: 0.6rem 1.25rem;
+        font-size: 1rem;
+        font-weight: 600;
+        border-radius: var(--radius-lg);
+        border: 2px solid var(--clr-accent);
+        color: var(--clr-accent);
+        background: transparent;
+        cursor: pointer;
+        transition: all var(--trans-fast) ease-in-out;
+      }
+      .btn:hover,
+      .btn:focus {
+        background: var(--clr-accent);
+        color: #000;
+      }
+      .btn-success {
+        border-color: var(--clr-success);
+        color: var(--clr-success);
+      }
+      .btn-success:hover,
+      .btn-success:focus {
+        background: var(--clr-success);
+        color: #000;
+      }
+      form input,
+      form textarea,
+      form select {
+        width: 100%;
+        padding: 0.75rem;
+        border-radius: 0.5rem;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        background: rgba(255, 255, 255, 0.05);
+        color: var(--clr-text);
+        font-size: 1rem;
+        line-height: 1.2;
+      }
+      form input:focus,
+      form textarea:focus,
+      form select:focus {
+        outline: none;
+        border-color: var(--clr-accent);
+      }
+      form label {
+        display: block;
+        margin-block: 0.75rem 0.25rem;
+        font-weight: 600;
+      }
+
+      /* ===== Page 1: Home ===== */
+      #home .hero {
+        display: grid;
+        gap: 2rem;
+        align-items: center;
+        grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
+      }
+      #home .hero-img {
+        border-radius: var(--radius-lg);
+        overflow: hidden;
+      }
+      #home .hero-content p {
+        max-width: 65ch;
+        color: var(--clr-text-muted);
+      }
+
+      /* ===== Page 2: Hobbies (hover zoom gallery) ===== */
+      .hobby-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1rem;
+        margin-top: 2rem;
+      }
+      .hobby-card {
+        position: relative;
+        overflow: hidden;
+        border-radius: var(--radius-lg);
+        cursor: pointer;
+      }
+      .hobby-card img {
+        transition: transform var(--trans-med) ease-in-out;
+      }
+      .hobby-card:hover img,
+      .hobby-card:focus-within img {
+        transform: scale(1.1);
+      } /* zoom on hover */
+      .hobby-card span {
+        position: absolute;
+        inset: auto 0 0 0;
+        padding: 0.5rem 1rem;
+        background: rgba(0, 0, 0, 0.6);
+        font-size: 0.875rem;
+        text-align: center;
+      }
+
+      /* ===== Page 3: Birthday timed reveal ===== */
+      #birthday .bday-wrapper {
+        position: relative;
+        min-height: 300px;
+        display: grid;
+        place-items: center;
+      }
+      #birthday .bday-initial,
+      #birthday .bday-form {
+        position: absolute;
+        inset: 0;
+        display: grid;
+        place-items: center;
+        transition: opacity var(--trans-med) linear;
+      }
+      #birthday .bday-initial {
+        animation: bdayHide 0s forwards;
+        animation-delay: 5s;
+      } /* will set opacity to 0 after 5s */
+      #birthday .bday-form {
+        opacity: 0;
+        animation: bdayShow 0s forwards;
+        animation-delay: 5s;
+      } /* show form after 5s */
+      @keyframes bdayHide {
+        to {
+          opacity: 0;
+          pointer-events: none;
+        }
+      }
+      @keyframes bdayShow {
+        to {
+          opacity: 1;
+          pointer-events: auto;
+        }
+      }
+
+      #birthday .bday-form-inner {
+        width: min(100%, 420px);
+        text-align: center;
+      }
+      #birthday .bday-form-inner textarea {
+        min-height: 140px;
+        resize: vertical;
+      }
+
+      .contact-grid {
+        display: grid;
+        gap: 2rem;
+        grid-template-columns: 1fr;
+      }
+      @media (min-width: 640px) {
+        .contact-grid {
+          grid-template-columns: 1fr 1fr;
+        }
+      }
+      .social-icons {
+        display: flex;
+        gap: 1rem;
+        align-items: center;
+        flex-wrap: wrap;
+        margin-top: 1rem;
+      }
+      .social-icons a {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        display: grid;
+        place-items: center;
+        background: rgba(255, 255, 255, 0.1);
+        transition: transform var(--trans-fast) ease;
+      }
+      .social-icons a:hover {
+        transform: scale(1.1);
+      }
+      .social-icons img {
+        width: 24px;
+        height: 24px;
+      }
+
+      /* ===== Page 5: Countries Slider (CSS only) ===== */
+      .slider {
+        position: relative;
+        max-width: 700px;
+        margin-inline: auto;
+        margin-top: 2rem;
+      }
+      .slider input[type="radio"] {
+        display: none;
+      }
+      .slides {
+        position: relative;
+        overflow: hidden;
+        border-radius: var(--radius-lg);
+      }
+      .slide {
+        position: absolute;
+        inset: 0;
+        opacity: 0;
+        transition: opacity var(--trans-med) ease-in-out;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: center;
+        text-align: center;
+      }
+      .slide img {
+        width: 100%;
+        height: auto;
+      }
+      .slide h3 {
+        margin: 0.5rem 0 0 0;
+        background: rgba(0, 0, 0, 0.6);
+        padding: 0.25rem 0.75rem;
+        border-radius: 0.5rem;
+      }
+
+      #slide1:checked ~ .slides .s1,
+      #slide2:checked ~ .slides .s2,
+      #slide3:checked ~ .slides .s3,
+      #slide4:checked ~ .slides .s4,
+      #slide5:checked ~ .slides .s5 {
+        opacity: 1;
+        position: relative;
+      }
+      .slider-controls {
+        display: flex;
+        justify-content: center;
+        gap: 0.5rem;
+        margin-top: 1rem;
+      }
+      .slider-controls label {
+        width: 14px;
+        height: 14px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.3);
+        cursor: pointer;
+        transition: transform var(--trans-fast) ease,
+          background var(--trans-fast) ease;
+      }
+      #slide1:checked ~ .slider-controls label[for="slide1"],
+      #slide2:checked ~ .slider-controls label[for="slide2"],
+      #slide3:checked ~ .slider-controls label[for="slide3"],
+      #slide4:checked ~ .slider-controls label[for="slide4"],
+      #slide5:checked ~ .slider-controls label[for="slide5"] {
+        background: var(--clr-accent);
+        transform: scale(1.2);
+      }
+
+      /* ===== Page 6: CV ===== */
+      #cv .cv-wrapper {
+        display: grid;
+        gap: 2rem;
+        grid-template-columns: 1fr;
+      }
+      @media (min-width: 768px) {
+        #cv .cv-wrapper {
+          grid-template-columns: 1fr 1fr;
+        }
+      }
+      #cv .cv-card {
+        background: rgba(255, 255, 255, 0.05);
+        padding: 1.5rem;
+        border-radius: var(--radius-lg);
+      }
+      #cv ul {
+        margin: 0;
+        padding-left: 1.25rem;
+      }
+      #cv ul li {
+        margin-bottom: 0.25rem;
+      }
+
+      /* ===== Responsive Tweaks ===== */
+      @media (prefers-reduced-motion: reduce) {
+        * {
+          transition: none !important;
+          animation: none !important;
+          scroll-behavior: auto !important;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="site-header">
+      <nav>
+        <span class="brand">MySite</span>
+        <span class="nav-links">
+          <a href="#home">Home</a>
+          <a href="#hobbies">Hobbies</a>
+          <a href="#birthday">Birthday</a>
+          <a href="#contact">Contact</a>
+          <a href="#travel">Travel</a>
+          <a href="#cv">CV</a>
+          <a href="#thankyou">Thank You</a>
+        </span>
+      </nav>
+    </header>
+
+    <main>
+      <section id="home" class="section-alt">
+        <div class="section-inner">
+          <div class="hero">
+            <div class="hero-img"></div>
+            <div class="hero-content">
+              <h1>Hi, I'm Makarious 👋</h1>
+              <p>
+                Computer Science student with experience in software
+                development, database management, and system analysis. Skilled
+                in Java, SQL, OOP, and data structures, with a strong passion
+                for coding, problem-solving, and building efficient solutions.
+                Always eager to learn and grow in the tech industry.
+              </p>
+              <a class="btn" href="#hobbies">Check my hobbies</a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="hobbies">
+        <div class="section-inner">
+          <h2>My Hobbies</h2>
+          <div class="hobby-grid">
+            <a class="hobby-card" href="#" aria-label="Coding">
+              <img
+                src="https://codingweek.org/wp-content/uploads/2023/09/chris-ried-ieic5Tq8YMk-unsplash-scaled.jpg"
+                alt="Coding on a laptop"
+              />
+              <span>Coding</span>
+            </a>
+            <a class="hobby-card" href="#" aria-label="Photography">
+              <img
+                src="https://picsum.photos/seed/photo/400/300"
+                alt="Camera and photos"
+              />
+              <span>Photography</span>
+            </a>
+
+            <a class="hobby-card" href="#" aria-label="Fitness">
+              <img
+                src="https://www.freeiconspng.com/uploads/exercise-icon-9.png"
+                alt="Workout gear"
+              />
+              <span>Fitness</span>
+            </a>
+            <a class="hobby-card" href="#" aria-label="Travel">
+              <img
+                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTx9Tl5-F7pCOl5RqtVNNzGaa2uXhnNkCmW0A&s"
+                alt="Suitcase and map"
+              />
+              <span>Travel</span>
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <section id="birthday" class="section-alt">
+        <div class="section-inner">
+          <h2>It's My Birthday! 🎉</h2>
+          <div class="bday-wrapper">
+            <div class="bday-initial">
+              <img
+                src="https://i.ytimg.com/vi/Lxi8e8enTOs/hq720.jpg?sqp=-oaymwEhCK4FEIIDSFryq4qpAxMIARUAAAAAGAElAADIQj0AgKJD&rs=AOn4CLAJpsHzTvxWmOefR5e0eS5t7-8ErQ"
+                alt="Birthday cake"
+              />
+            </div>
+            <div class="bday-form">
+              <div class="bday-form-inner">
+                <h3>Leave Me a Birthday Message</h3>
+                <form action="#thankyou" method="get">
+                  <label for="bday-msg" class="visually-hidden"
+                    >Your birthday message</label
+                  >
+                  <textarea
+                    id="bday-msg"
+                    name="message"
+                    placeholder="Write something kind..."
+                  ></textarea>
+                  <button
+                    type="submit"
+                    class="btn-success btn"
+                    style="margin-top: 1rem"
+                  >
+                    Send
+                  </button>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="contact">
+        <div class="section-inner">
+          <h2>Contact Me</h2>
+          <div class="contact-grid">
+            <form action="#thankyou" method="get">
+              <label for="name">Name</label>
+              <input type="text" id="name" name="name" required />
+
+              <label for="email">Email</label>
+              <input type="email" id="email" name="email" required />
+
+              <label for="msg">Message</label>
+              <textarea
+                id="msg"
+                name="msg"
+                placeholder="Say hi!"
+                required
+              ></textarea>
+
+              <button type="submit" class="btn" style="margin-top: 1rem">
+                Send Message
+              </button>
+            </form>
+            <div>
+              <h3>Find me on Social Media</h3>
+              <p>Click an icon to visit.</p>
+              <div class="social-icons">
+                <a
+                  href="https://www.facebook.com/makarious.rafek.3"
+                  target="_blank"
+                  rel="noopener"
+                >
+                  <img
+                    src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/facebook.svg"
+                    alt="Facebook"
+                  />
+                </a>
+                <a
+                  href="https://www.instagram.com/makariousrafek2004/"
+                  target="_blank"
+                  rel="noopener"
+                >
+                  <img
+                    src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/instagram.svg"
+                    alt="Instagram"
+                  />
+                </a>
+
+                <a
+                  href="https://www.linkedin.com/in/makarious-rafek-043aa027b/"
+                  target="_blank"
+                  rel="noopener"
+                >
+                  <img
+                    src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/linkedin.svg"
+                    alt="LinkedIn"
+                  />
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="travel" class="section-alt">
+        <div class="section-inner">
+          <h2>Countries I Want to Visit</h2>
+          <div class="slider">
+            <input type="radio" name="slides" id="slide1" checked />
+            <input type="radio" name="slides" id="slide2" />
+            <input type="radio" name="slides" id="slide4" />
+            <input type="radio" name="slides" id="slide5" />
+
+            <div class="slides">
+              <div class="slide s1">
+                <h3>Japan</h3>
+                <img
+                  src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRzsSL1vqetm-k2-2CHmokEBcI-L0AYshjIkQ&s"
+                  alt="Japan scenery"
+                />
+              </div>
+              <div class="slide s2">
+                <h3>Italy</h3>
+                <img
+                  src="https://media.istockphoto.com/id/163739027/photo/view-of-bogliasco-italy.jpg?s=612x612&w=0&k=20&c=2Ph2hNBkLoWyw73Zab6tFPIqa0d3mYaDl-2ONg_MY9M="
+                  alt="Italy scenery"
+                />
+              </div>
+
+              <div class="slide s4">
+                <h3>sri lanka</h3>
+                <img
+                  src="https://wallpapers.com/images/featured/sri-lanka-c1pvvvls1r9gj8dr.jpg"
+                  alt=" sri lanka"
+                />
+              </div>
+              <div class="slide s5">
+                <h3>Brazil</h3>
+                <img
+                  src="https://t4.ftcdn.net/jpg/01/09/60/11/360_F_109601187_QVo9iJLPJc3HqZOcgJBk4daB86hgdbdu.jpg"
+                  alt="Brazil landscape"
+                />
+              </div>
+            </div>
+
+            <div class="slider-controls" aria-label="Slide controls">
+              <label for="slide1" aria-label="Show Japan"></label>
+              <label for="slide2" aria-label="Show Italy"></label>
+              <label for="slide4" aria-label="Show sri lanka"></label>
+              <label for="slide5" aria-label="Show Brazil"></label>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== Page 6: CV ===== -->
+      <section id="cv">
+        <div class="section-inner">
+          <h2>My CV</h2>
+          <div class="cv-wrapper">
+            <div class="cv-card">
+              <h3>Personal Info</h3>
+              <p><strong>Name:</strong>Makarious Rafek</p>
+              <p><strong>Location:</strong> Cairo, Egypt</p>
+              <p><strong>Email:</strong> makariousrafek498@gmail.com</p>
+            </div>
+            <div class="cv-card">
+              <h3>Education</h3>
+              <p>
+                Future University in Egypt – BSc Computer Science (Expected
+                2026)
+              </p>
+              <p>CGPA: 3.68</p>
+            </div>
+            <div class="cv-card">
+              <h3>Skills</h3>
+              <ul>
+                <li>HTML / CSS</li>
+                <li>JavaScript / React</li>
+                <li>Flutter / Dart</li>
+                <li>Java, C++</li>
+                <li>Problem Solving / Competitive Programming</li>
+              </ul>
+            </div>
+            <div class="cv-card">
+              <h3>Projects</h3>
+              <ul>
+                <li>Quiz App (Flutter + GetX)</li>
+                <li>Distributed Systems Essay Tools</li>
+                <li>MRI ML (early detection of alzahimer)</li>
+              </ul>
+            </div>
+            <div class="cv-card"></div>
+            <div class="cv-card">
+              <h3>Languages</h3>
+              <ul>
+                <li>Arabic (native)</li>
+                <li>English (fluent)</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="thankyou" class="section-alt">
+        <div class="section-inner" style="text-align: center; max-width: 600px">
+          <h2>Thank You!</h2>
+
+          <a class="btn" href="#home">Back Home</a>
+        </div>
+      </section>
+    </main>
+
+    <footer
+      style="
+        text-align: center;
+        padding: 2rem 1rem;
+        font-size: 0.875rem;
+        color: var(--clr-text-muted);
+      "
+    >
+      <p>
+        © <span id="year">2025</span> Your Name. Built with pure HTML & CSS.
+      </p>
+    </footer>
+  </body>
+</html>
